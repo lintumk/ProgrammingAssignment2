@@ -1,0 +1,139 @@
+<!-- R Commander Markdown Template -->
+
+Replace with Main Title
+=======================
+
+### Your Name
+
+### `r as.character(Sys.Date())`
+
+```{r echo=FALSE}
+# include this code chunk as-is to set options
+knitr::opts_chunk$set(comment=NA, prompt=TRUE, out.width=750, fig.height=8, fig.width=8)
+library(Rcmdr)
+library(car)
+library(RcmdrMisc)
+```
+
+
+```{r echo=FALSE}
+# include this code chunk as-is to enable 3D graphs
+library(rgl)
+knitr::knit_hooks$set(webgl = hook_webgl)
+```
+
+
+```{r}
+csDataset <- readXL("C:/Users/Lintu/Desktop/cs.xls", rownames=FALSE, 
+  header=TRUE, na="", sheet="Cross sectional data ", stringsAsFactors=TRUE)
+```
+
+
+```{r}
+library(tcltk, pos=14)
+```
+
+
+```{r}
+library(abind, pos=15)
+```
+
+
+```{r}
+#####Create two-way table and compare two proportions (Fisher's exact test)#####
+Fisher.summary.table <- NULL
+.Table <- NULL
+.Table <- xtabs(~Smoking+Alcohol, data=csDataset)
+.Table
+fisher.test(.Table)
+res <- NULL
+res <- fisher.test(.Table)
+Fisher.summary.table <- rbind(Fisher.summary.table, 
+  summary.table.twoway(table=.Table, res=res))
+colnames(Fisher.summary.table)[length(Fisher.summary.table)] <-  
+  gettextRcmdr( colnames(Fisher.summary.table)[length(Fisher.summary.table)])
+Fisher.summary.table
+```
+
+```{r}
+#####Create two-way table and compare two proportions (Fisher's exact test)#####
+Fisher.summary.table <- NULL
+.Table <- NULL
+.Table <- xtabs(~Smoking+Alcohol, data=csDataset)
+.Table
+rowPercents(.Table) # Row Percentages
+fisher.test(.Table)
+res <- NULL
+res <- fisher.test(.Table)
+Fisher.summary.table <- rbind(Fisher.summary.table, summary.table.twoway(table=.Table, res=res))
+colnames(Fisher.summary.table)[length(Fisher.summary.table)] <-  gettextRcmdr( 
+  colnames(Fisher.summary.table)[length(Fisher.summary.table)])
+Fisher.summary.table
+```
+
+```{r}
+#####Create two-way table and compare two proportions (Fisher's exact test)#####
+Fisher.summary.table <- NULL
+.Table <- NULL
+.Table <- xtabs(~Alcohol+Smoking, data=csDataset)
+.Table
+rowPercents(.Table) # Row Percentages
+fisher.test(.Table)
+res <- NULL
+res <- fisher.test(.Table)
+Fisher.summary.table <- rbind(Fisher.summary.table, summary.table.twoway(table=.Table, res=res))
+colnames(Fisher.summary.table)[length(Fisher.summary.table)] <-  gettextRcmdr( 
+  colnames(Fisher.summary.table)[length(Fisher.summary.table)])
+Fisher.summary.table
+```
+
+```{r}
+#####Create two-way table and compare two proportions (Fisher's exact test)#####
+Fisher.summary.table <- NULL
+.Table <- NULL
+.Table <- xtabs(~Alcohol+Smoking, data=csDataset)
+.Table
+totPercents(.Table) # Percentage of Total
+fisher.test(.Table)
+res <- NULL
+res <- fisher.test(.Table)
+Fisher.summary.table <- rbind(Fisher.summary.table, summary.table.twoway(table=.Table, res=res))
+colnames(Fisher.summary.table)[length(Fisher.summary.table)] <-  gettextRcmdr( 
+  colnames(Fisher.summary.table)[length(Fisher.summary.table)])
+Fisher.summary.table
+```
+
+```{r}
+#####Frequency Distributions#####
+.Table <- NULL
+(.Table <- table(csDataset$Diabetes, exclude=NULL))  # counts for Diabetes
+```
+
+```{r}
+#####Frequency Distributions#####
+.Table <- NULL
+(.Table <- table(csDataset$Diabetes, exclude=NULL))  # counts for Diabetes
+round(100*.Table/sum(.Table), 2)  # percentages for   Diabetes
+```
+
+```{r}
+#####Confidence interval for a proportion#####
+prop.conf(2, 1814, 95)
+```
+
+```{r}
+#####Numerical summaries#####
+res <- numSummary(csDataset[,"Income"], statistics=c("mean", "sd", "quantiles"), quantiles=c(0,.25,.5,.75,1))
+colnames(res$table)[1:2] <- gettextRcmdr( colnames(res$table)[1:2])
+res
+```
+
+```{r}
+#####Confidence interval for a mean#####
+se <- 1814/ sqrt(1814)
+CIL <- 2289 - qt((100+95)/200, 1814-1)*se
+CIH <- 2289 + qt((100+95)/200, 1814-1)*se
+cat(" 95 ", gettextRcmdr("%CI"), " ", round(CIL,3), "-", round(CIH,3), "
+", sep="")
+```
+
